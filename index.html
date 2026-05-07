@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catch the Ball Game</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      background: #f0f0f0;
+    }
+
+    canvas {
+      background: white;
+      border: 2px solid black;
+      margin-top: 20px;
+    }
+
+    h2 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Catch the Ball </h2>
+<p>Move mouse to catch the ball</p>
+
+<canvas id="game" width="300" height="400"></canvas>
+
+<script>
+let canvas = document.getElementById("game");
+let ctx = canvas.getContext("2d");
+
+let ballX = Math.random() * 280;
+let ballY = 0;
+let speed = 2;
+
+let basketX = 120;
+let basketWidth = 70;
+
+let score = 0;
+
+document.addEventListener("mousemove", function(e) {
+  let rect = canvas.getBoundingClientRect();
+  basketX = e.clientX - rect.left - basketWidth / 2;
+});
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.beginPath();
+  ctx.arc(ballX, ballY, 10, 0, Math.PI * 2);
+  ctx.fillStyle = "blue";
+  ctx.fill();
+  ctx.closePath();
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(basketX, 370, basketWidth, 10);
+
+  ballY += speed;
+
+  if (ballY > 360 && ballX > basketX && ballX < basketX + basketWidth) {
+    score++;
+    ballY = 0;
+    ballX = Math.random() * 280;
+    speed += 0.2;
+  }
+
+  if (ballY > 400) {
+    alert("Game Over! Score: " + score);
+    document.location.reload();
+  }
+
+  ctx.fillStyle = "black";
+  ctx.font = "16px Arial";
+  ctx.fillText("Score: " + score, 10, 20);
+}
+
+setInterval(draw, 20);
+</script>
+
+</body>
+</html>
